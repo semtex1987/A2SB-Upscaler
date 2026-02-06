@@ -1,1 +1,32 @@
+services:
+  upsampler:
+    build: .
+    image: nvidia_upsample_gradio
+    container_name: nvidia_upsample
+    
+    ports:
+      - "7860:7860"
+    
+    volumes:
+      - ./restored_audio:/app/outputs
+    
+    environment:
+      # FIX 1: Overriding the Dockerfile setting.
+      # We removed "expandable_segments:True". This fixes the ASSERT FAILED error.
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      
+      # FIX 2: Since you are on Passthrough, we don't need to force GLOO anymore.
+      # We can let PyTorch choose the best backend (which is default).
+      # (If it hangs, we can add GLOO back, but natively it should work).
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              # We select the specific GPU to ensure clean isolation
+              device_ids: ['0']
+              capabilities: [gpu]
 
+    stdin_open: true
+    tty: true
