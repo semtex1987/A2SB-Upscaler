@@ -21,8 +21,8 @@ It wraps the original inference code in a [Gradio](https://gradio.app/) web UI, 
 
 1.  **Clone this repository**:
     ```bash
-    git clone <your-repo-url>
-    cd <repo-directory>
+    git clone https://github.com/semtex1987/A2SB-Upscaler/tree/main
+    cd A2SB-Upscaler
     ```
 
 2.  **Start the container**:
