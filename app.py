@@ -147,7 +147,8 @@ def restore_audio(input_file, steps, cutoff_choice, progress=gr.Progress()):
         restore_point = start_prog + (prog_range * 0.2)
         progress(restore_point, desc=f"[{display_name}] Running A2SB Inference...")
         
-        run_a2sb_inference(temp_in, temp_out, steps)
+        # Pass cutoff_hz here
+        run_a2sb_inference(temp_in, temp_out, steps, cutoff_hz)
         
         if not os.path.exists(temp_out):
              raise Exception(f"Inference script failed to generate {temp_out}")
