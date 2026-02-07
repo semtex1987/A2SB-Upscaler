@@ -84,9 +84,18 @@ def generate_comparison_plot(original_path, restored_path):
 
 # --- Inference Functions ---
 
-def run_a2sb_inference(input_path, output_path, steps):
+def run_a2sb_inference(input_path, output_path, steps, cutoff_hz):
     script_name = "A2SB_upsample_api.py"
-    command = ["python3", script_name, "-f", input_path, "-o", output_path, "-n", str(int(steps))]
+    
+    # Pass the cutoff (-c) explicitly
+    command = [
+        "python3", script_name, 
+        "-f", input_path, 
+        "-o", output_path, 
+        "-n", str(int(steps)),
+        "-c", str(cutoff_hz) 
+    ]
+    
     env = os.environ.copy()
     env["PYTHONPATH"] = "/app"
     
