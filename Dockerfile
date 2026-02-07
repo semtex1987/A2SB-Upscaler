@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # 2. Clone the repository
-RUN git clone https://github.com/NVIDIA/diffusion-audio-restoration .
+RUN git clone https://github.com/semtex1987/diffusion-audio-restoration .
 
 # 3. Install Python dependencies
 RUN pip install --no-cache-dir \
