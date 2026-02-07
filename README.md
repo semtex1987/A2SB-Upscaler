@@ -6,43 +6,46 @@ It wraps the original inference code in a [Gradio](https://gradio.app/) web UI, 
 
 ## **Features**
 
-* **Web Interface**: Easy-to-use Gradio UI for uploading and processing audio.  
-* **Stereo Support**: Automatically detects stereo audio, splits the Left/Right channels, processes them individually using the A2SB model, and recombines them into a high-fidelity stereo output.  
-* **Bandwidth Control**: Includes a selectable Low-Pass Filter (4kHz, 14kHz, 16kHz) to simulate specific bandwidth limitations, giving the model a clear starting point for restoration.  
-* **Automatic Setup**: Docker handles all dependencies, including system libraries, Python packages, and NVIDIA drivers.  
-* **Pre-trained Models**: Automatically downloads the required checkpoints (A2SB\_twosplit\_0.5\_1.0\_release.ckpt, etc.) during the first build.  
-* **GPU Acceleration**: Leverages NVIDIA GPUs for fast inference using Passthrough or vGPU modes.  
-* **Persisted Output**: Restored audio files are saved to a local folder on your host machine.
+- **Web Interface**: Easy-to-use Gradio UI for uploading and processing audio.  
+- **Stereo Support**: Automatically detects stereo audio, splits the Left/Right channels, processes them individually using the A2SB model, and recombines them into a high-fidelity stereo output.  
+- **Bandwidth Control**: Includes a selectable Low-Pass Filter (4kHz, 14kHz, 16kHz) to simulate specific bandwidth limitations, giving the model a clear starting point for restoration.  
+- **Automatic Setup**: Docker handles all dependencies, including system libraries, Python packages, and NVIDIA drivers.  
+- **Pre-trained Models**: Automatically downloads the required checkpoints (A2SB\_twosplit\_0.5\_1.0\_release.ckpt, etc.) during the first build.  
+- **GPU Acceleration**: Leverages NVIDIA GPUs for fast inference using Passthrough or vGPU modes.  
+- **Persisted Output**: Restored audio files are saved to a local folder on your host machine.
 
-## **Prerequisites**
+## Prerequisites
 
-* **Docker** and **Docker Compose** installed on your machine.  
-* **NVIDIA GPU** with appropriate drivers and nvidia-container-toolkit installed (required for CUDA support).  
-  * *Note: For best performance on vGPU setups, PCIe Passthrough is recommended.*
+-   **Docker** and **Docker Compose** installed on your machine.
+-   **NVIDIA GPU** with appropriate drivers and `nvidia-container-toolkit` installed (required for CUDA support).
 
-## **Installation & Usage**
+## Installation & Usage
 
-1. **Clone this repository**:  
-   Bash  
-   git clone https://github.com/semtex1987/A2SB-Upscaler/tree/main  
-   cd A2SB-Upscaler
+1.  **Clone this repository**:
+    ```bash
+    git clone https://github.com/semtex1987/A2SB-Upscaler/tree/main
+    cd A2SB-Upscaler
+    ```
 
-2. **Start the container**:  
-   Run the following command to build the image and start the service:  
-   Bash  
-   docker compose up \--build
+2.  **Start the container**:
+    Run the following command to build the image and start the service:
+    ```bash
+    docker compose up --build
+    ```
+    *Note: The first run may take 5-10+ minutes as it builds the Docker image and downloads the model checkpoints.*
 
-   *Note: The first run may take 5-10+ minutes as it builds the Docker image and downloads the model checkpoints.*  
-3. **Access the Interface**:  
-   Open your web browser and go to:  
-   http://localhost:7860
+3.  **Access the Interface**:
+    Open your web browser and go to:
+    ```
+    http://localhost:7860
+    ```
 
-4. **Restore Audio**:  
-   * **Upload Audio**: Drag and drop your WAV or MP3 file. Stereo files are fully supported.  
-   * **Steps**: Adjust the slider (default 50). Higher steps generally equal better quality but slower processing.  
-   * **Input Lowpass Filter**: Select the frequency cutoff (e.g., **4kHz**, **14kHz**, or **16kHz**).  
-     * *Tip: This applies a filter to your input audio before processing. Select the value that matches the "degraded" state of your audio (e.g., use 4kHz for telephone-quality audio) so the model knows where to start restoring.*  
-   * **Submit**: Click to start processing. The terminal will show the progress of splitting, filtering, and restoring each channel.
+4.  **Restore Audio**:
+    -   **Web Interface**: Easy-to-use Gradio UI for uploading and processing audio.
+    -   **Automatic Setup**: Docker handles all dependencies, including system libraries and Python packages.
+    -   **Pre-trained Models**: Automatically downloads the required checkpoints (`A2SB_twosplit_0.5_1.0_release.ckpt`, etc.).
+    -   **GPU Acceleration**: Leverages NVIDIA GPUs for fast inference.
+    -   **Persisted Output**: Restored audio files are saved to a local folder on your host machine.
 
 ## **Output**
 
