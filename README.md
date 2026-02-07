@@ -7,7 +7,8 @@ It wraps the original inference code in a [Gradio](https://gradio.app/) web UI, 
 ## **Features**
 
 - **Web Interface**: Easy-to-use Gradio UI for uploading and processing audio.  
-- **Stereo Support**: Automatically detects stereo audio, splits the Left/Right channels, processes them individually using the A2SB model, and recombines them into a high-fidelity stereo output.  
+- **Stereo Support**: Automatically detects stereo audio, splits the Left/Right channels, processes them individually using the A2SB model, and recombines them into a high-fidelity stereo output.
+- **Spectral Analysis**: Provides a before and after spectrograph of the input audio file to visually see if A2SB worked or not.
 - **Bandwidth Control**: Includes a selectable Low-Pass Filter (4kHz, 14kHz, 16kHz) to simulate specific bandwidth limitations, giving the model a clear starting point for restoration.  
 - **Automatic Setup**: Docker handles all dependencies, including system libraries, Python packages, and NVIDIA drivers.  
 - **Pre-trained Models**: Automatically downloads the required checkpoints (A2SB\_twosplit\_0.5\_1.0\_release.ckpt, etc.) during the first build.  
