@@ -18,7 +18,6 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              # We select the specific GPU to ensure clean isolation
               device_ids: ['0']
               capabilities: [gpu]
 
