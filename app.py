@@ -1,7 +1,6 @@
 import gradio as gr
 import subprocess
 import os
-import time
 import numpy as np
 import matplotlib
 # Use 'Agg' backend to prevent errors in Docker (no display)
@@ -189,7 +188,6 @@ def restore_audio(input_file, steps, cutoff_choice, progress=gr.Progress()):
 
         # Step 4: Finalize
         progress(1.0, desc="Done!")
-        time.sleep(1)
         return final_output_path, plot_path
 
     except subprocess.CalledProcessError as e:
