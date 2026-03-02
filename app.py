@@ -85,6 +85,7 @@ def generate_comparison_plot(original_path, restored_path):
 
 def run_a2sb_inference(input_path, output_path, steps, cutoff_hz):
     script_name = "A2SB_upsample_api.py"
+    cutoff_khz = int(round(cutoff_hz / 1000))
     
     # Pass the cutoff (-c) explicitly
     command = [
@@ -92,7 +93,7 @@ def run_a2sb_inference(input_path, output_path, steps, cutoff_hz):
         "-f", input_path, 
         "-o", output_path, 
         "-n", str(int(steps)),
-        "-c", str(cutoff_hz) 
+        "-c", str(cutoff_khz)
     ]
     
     env = os.environ.copy()
@@ -102,7 +103,23 @@ def run_a2sb_inference(input_path, output_path, steps, cutoff_hz):
         command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
         cwd="/app/inference", env=env
     )
+
+    # Keep a small, actionable log in container output for inference debugging
+    print(f"[A2SB] command: {' '.join(command)}")
+    if result.stdout:
+        print("[A2SB] stdout (tail):", "\n".join(result.stdout.splitlines()[-20:]))
+    if result.stderr:
+        print("[A2SB] stderr (tail):", "\n".join(result.stderr.splitlines()[-20:]))
+
     return result
+
+def ensure_a2sb_input_format(segment):
+    """
+    NVIDIA's released A2SB checkpoints are trained for 48kHz waveforms.
+    Normalizing input here avoids feeding mismatched sample rates that can
+    cause the restored high band to be effectively empty.
+    """
+    return segment.set_frame_rate(48000).set_sample_width(2)
 
 # --- Main Logic with Progress ---
 
@@ -116,6 +133,7 @@ def restore_audio(input_file, steps, cutoff_choice, progress=gr.Progress()):
     
     try:
         audio = AudioSegment.from_file(input_file)
+        audio = ensure_a2sb_input_format(audio)
     except Exception as e:
         raise gr.Error(f"Failed to load audio: {e}")
 
