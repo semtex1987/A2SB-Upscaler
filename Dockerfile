@@ -49,13 +49,15 @@ RUN wget -O ckpts/A2SB_onesplit_0.0_1.0_release.ckpt https://huggingface.co/nvid
 RUN wget -O ckpts/A2SB_twosplit_0.0_0.5_release.ckpt https://huggingface.co/nvidia/audio_to_audio_schrodinger_bridge/resolve/main/ckpt/A2SB_twosplit_0.0_0.5_release.ckpt
 
 # 6. Automate the Config Update
-# FIX: Replaced 'if' statement with 'setdefault' to fix SyntaxError in one-liner
+# IMPORTANT: ensemble_2split_sampling expects the two split-domain checkpoints
+# (0.0-0.5 and 0.5-1.0). Using the one-split checkpoint here can leave the
+# upper split unmodeled, which manifests as zero-filled high-frequency bands.
 RUN python3 -c "import yaml; \
     path = 'configs/ensemble_2split_sampling.yaml'; \
     data = yaml.safe_load(open(path)); \
     data['model']['pretrained_checkpoints'] = [ \
-        '/app/ckpts/A2SB_onesplit_0.0_1.0_release.ckpt', \
-        '/app/ckpts/A2SB_twosplit_0.0_0.5_release.ckpt' \
+        '/app/ckpts/A2SB_twosplit_0.0_0.5_release.ckpt', \
+        '/app/ckpts/A2SB_twosplit_0.5_1.0_release.ckpt' \
     ]; \
     trainer = data.setdefault('trainer', {}); \
     trainer['strategy'] = 'auto'; \
