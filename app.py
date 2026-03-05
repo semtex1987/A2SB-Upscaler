@@ -26,7 +26,7 @@ def butter_lowpass_filter(data, cutoff, fs, order=10):
     if normal_cutoff >= 1:
         return data 
     sos = butter(order, normal_cutoff, btype='low', analog=False, output='sos')
-    return sosfilt(sos, data)
+    return sosfilt(sos, data, axis=0)
 
 def apply_lowpass_to_segment(segment, cutoff_freq_hz):
     channel_data = np.array(segment.get_array_of_samples())
