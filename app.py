@@ -201,22 +201,23 @@ def restore_audio(input_file, steps, cutoff_choice, progress=gr.Progress()):
 
 # --- Interface ---
 
-custom_css = "body { background-color: #121212; color: white; }"
+if __name__ == "__main__":
+    custom_css = "body { background-color: #121212; color: white; }"
 
-iface = gr.Interface(
-    fn=restore_audio,
-    inputs=[
-        gr.Audio(type="filepath", label="Upload Audio"),
-        gr.Slider(minimum=10, maximum=200, value=50, step=10, label="Steps (Quality)"),
-        gr.Dropdown(choices=["4kHz", "14kHz", "16kHz"], value="14kHz", label="Input Lowpass Filter (Cutoff)")
-    ],
-    outputs=[
-        gr.Audio(label="Restored Result"),
-        gr.Image(label="Spectral Analysis (Before vs After)")
-    ],
-    title="NVIDIA A2SB Stereo Restorer",
-    description="Upload audio to simulate bandwidth loss and restore it. Progress bar tracks splitting, restoring, and analysis steps.",
-    css=custom_css
-)
+    iface = gr.Interface(
+        fn=restore_audio,
+        inputs=[
+            gr.Audio(type="filepath", label="Upload Audio"),
+            gr.Slider(minimum=10, maximum=200, value=50, step=10, label="Steps (Quality)"),
+            gr.Dropdown(choices=["4kHz", "14kHz", "16kHz"], value="14kHz", label="Input Lowpass Filter (Cutoff)")
+        ],
+        outputs=[
+            gr.Audio(label="Restored Result"),
+            gr.Image(label="Spectral Analysis (Before vs After)")
+        ],
+        title="NVIDIA A2SB Stereo Restorer",
+        description="Upload audio to simulate bandwidth loss and restore it. Progress bar tracks splitting, restoring, and analysis steps.",
+        css=custom_css
+    )
 
-iface.launch(server_name="0.0.0.0", server_port=7860)
+    iface.launch(server_name="0.0.0.0", server_port=7860)
