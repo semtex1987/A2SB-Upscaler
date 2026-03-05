@@ -75,6 +75,12 @@ ENV CUDA_VISIBLE_DEVICES=0 \
     SLURM_NTASKS=1 \
     PYTORCH_CUDA_ALLOC_CONF="expandable_segments:True,max_split_size_mb:512"
 
-# 8. Setup Entrypoint
-COPY app.py /app/app.py
+# 8. Create a non-root user and setup directories
+RUN useradd -m -u 1000 appuser && \
+    mkdir -p /app/inputs /app/outputs && \
+    chown -R appuser:appuser /app
+
+# 9. Setup Entrypoint
+USER appuser
+COPY --chown=appuser:appuser app.py /app/app.py
 CMD ["python3", "app.py"]
